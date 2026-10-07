@@ -218,11 +218,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       ]);
 
       setSettings(loadedSettings || {
-        name: 'Studio Bella Beauty',
-        subtitle: 'Manicure • Pedicure • Sobrancelhas',
+        name: 'Taciana Design',
+        subtitle: 'Sobrancelhas • Cílios • Estética',
         phone: '(11) 99999-9999',
         address: 'Rua das Flores, 123 - Centro',
-        instagram: '@bellabeauty',
+        instagram: '@tacianadesign',
         hours: 'Seg a Sáb • 09:00 às 19:00',
         welcomeMessage: 'Agende seu horário com nossas especialistas. Conforto, delicadeza e atendimento de alta qualidade em cada detalhe.',
         heroTitle: 'Beleza no seu tempo',
@@ -248,11 +248,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         { id: '3', name: 'Design de Sobrancelhas', category: 'Sobrancelhas', duration: 30, price: 45, description: 'Valorização do olhar com técnica personalizada para o formato do seu rosto.', imageUrl: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=800&q=80' }
       ]);
       setSettings({
-        name: 'Studio Bella Beauty',
-        subtitle: 'Manicure • Pedicure • Sobrancelhas',
+        name: 'Taciana Design',
+        subtitle: 'Sobrancelhas • Cílios • Estética',
         phone: '(11) 99999-9999',
         address: 'Rua das Flores, 123 - Centro',
-        instagram: '@bellabeauty',
+        instagram: '@tacianadesign',
         hours: 'Seg a Sáb • 09:00 às 19:00',
         welcomeMessage: 'Agende seu horário com nossas especialistas. Conforto, delicadeza e atendimento de alta qualidade em cada detalhe.',
         heroTitle: 'Beleza no seu tempo',

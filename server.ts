@@ -478,7 +478,7 @@ async function startServer() {
   if (!existingSettings) {
     await db.run(`
       INSERT INTO settings (id, name, subtitle, phone, address, instagram, hours, promoActive, promoTitle, promoDescription, promoImageUrl, promoEndsAt, promoService, promoPrice, promoDiscount) 
-      VALUES (1, 'Bella Beauty', 'Manicure • Pedicure • Sobrancelhas', '(11) 99999-9999', 'Rua das Flores, 123 - Centro', '@bellabeauty', 'Seg a Sáb • 09:00 às 19:00', 0, 'Semana da Beleza!', 'Desconto especial em todos os serviços.', 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', '', '', '', 0)
+      VALUES (1, 'Taciana Design', 'Sobrancelhas • Cílios • Estética', '(11) 99999-9999', 'Rua das Flores, 123 - Centro', '@tacianadesign', 'Seg a Sáb • 09:00 às 19:00', 0, 'Semana da Beleza!', 'Desconto especial em todos os serviços.', 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', '', '', '', 0)
     `);
   }
 
@@ -685,7 +685,7 @@ async function startServer() {
 
         const dataDump = {
           exportadoEm: new Date().toISOString(),
-          sistema: 'Studio Bella Beauty - Pacote de Publicação Atualizado',
+          sistema: 'Taciana Design - Pacote de Publicação Atualizado',
           configuracoes: curSettings,
           servicos: curServices,
           categorias: curCategories,
