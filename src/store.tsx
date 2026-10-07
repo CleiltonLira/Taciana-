@@ -274,11 +274,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const refreshNotifications = async () => {
     if (!user) return;
     try {
-      // Check admin or client notifications
       const userId = user.role === 'admin' ? 'admin' : user.id;
-      const res = await fetch(`/api/notifications/${userId}`);
-      if (res.ok) setNotifications(await res.json());
-    } catch (e) { console.error(e); }
+      const res = await fetch(`/api/notifications/${userId}`).catch(() => null);
+      if (res && res.ok) {
+        const data = await res.json();
+        setNotifications(data);
+        localStorage.setItem('bb_notifications', JSON.stringify(data));
+      } else {
+        const localNotifs = localStorage.getItem('bb_notifications');
+        if (localNotifs) setNotifications(JSON.parse(localNotifs));
+      }
+    } catch (e) {
+      // Silent catch for offline/static mode
+    }
   };
 
   const refreshMessages = async () => {
@@ -287,13 +295,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const url = user.role === 'admin' || user.role === 'staff'
         ? '/api/messages'
         : `/api/messages?userId=${user.id}`;
-      const res = await fetch(url);
-      if (res.ok) {
+      const res = await fetch(url).catch(() => null);
+      if (res && res.ok) {
         const data = await res.json();
         setMessages(data);
+        localStorage.setItem('bb_messages', JSON.stringify(data));
+      } else {
+        const localMsgs = localStorage.getItem('bb_messages');
+        if (localMsgs) setMessages(JSON.parse(localMsgs));
       }
     } catch (e) {
-      console.error(e);
+      // Silent catch for offline/static mode
     }
   };
 
@@ -308,19 +320,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const refreshUser = async () => {
     if (!user) return;
     try {
-      const res = await fetch(`/api/users/${user.id}`);
-      if (res.ok) {
+      const res = await fetch(`/api/users/${user.id}`).catch(() => null);
+      if (res && res.ok) {
         const freshUser = await res.json();
         setUser(freshUser);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      // Silent catch
+    }
   };
 
   const refreshBookings = async () => {
     try {
-      const bkgRes = await fetch('/api/bookings');
-      if (!bkgRes.ok) return;
+      const bkgRes = await fetch('/api/bookings').catch(() => null);
+      if (!bkgRes || !bkgRes.ok) {
+        const localBkgs = localStorage.getItem('bb_bookings');
+        if (localBkgs) {
+          setBookings(JSON.parse(localBkgs));
+        }
+        return;
+      }
       const data: (Booking & { clientPhone?: string; clientName?: string; clientCpf?: string })[] = await bkgRes.json();
+      localStorage.setItem('bb_bookings', JSON.stringify(data));
 
       // Se já carregou inicialmente, verificar se há novo agendamento ou chegada de cliente ao salão
       if (initialBookingsLoadedRef.current) {
@@ -354,7 +375,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       initialBookingsLoadedRef.current = true;
       setBookings(data);
     } catch (e) {
-      console.error(e);
+      // Silent catch for offline/static mode
     }
   };
 
