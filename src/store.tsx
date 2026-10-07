@@ -198,19 +198,76 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const fetchInitialData = async () => {
     try {
       const [svcRes, setRes, catRes, profRes, fbRes] = await Promise.all([
-        fetch('/api/services'),
-        fetch('/api/settings'),
-        fetch('/api/categories'),
-        fetch('/api/professionals'),
-        fetch('/api/feedbacks')
+        fetch('/api/services').catch(() => null),
+        fetch('/api/settings').catch(() => null),
+        fetch('/api/categories').catch(() => null),
+        fetch('/api/professionals').catch(() => null),
+        fetch('/api/feedbacks').catch(() => null)
       ]);
-      setServices(await svcRes.json());
-      setSettings(await setRes.json());
-      setCategories(await catRes.json());
-      setProfessionals(await profRes.json());
-      setFeedbacks(await fbRes.json());
+
+      const loadedServices = svcRes && svcRes.ok ? await svcRes.json() : null;
+      const loadedSettings = setRes && setRes.ok ? await setRes.json() : null;
+      const loadedCategories = catRes && catRes.ok ? await catRes.json() : null;
+      const loadedProfessionals = profRes && profRes.ok ? await profRes.json() : null;
+      const loadedFeedbacks = fbRes && fbRes.ok ? await fbRes.json() : null;
+
+      setServices(loadedServices && loadedServices.length > 0 ? loadedServices : [
+        { id: '1', name: 'Manicure Tradicional', category: 'Manicure', duration: 45, price: 35, description: 'Cutilagem e esmaltação impecável com produtos de alta qualidade.', imageUrl: 'https://images.unsplash.com/photo-1632345031435-877ff6c2057d?auto=format&fit=crop&w=800&q=80' },
+        { id: '2', name: 'Pedicure Completa', category: 'Pedicure', duration: 45, price: 40, description: 'Cuidado completo para os pés, relaxamento e acabamento perfeito.', imageUrl: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80' },
+        { id: '3', name: 'Design de Sobrancelhas', category: 'Sobrancelhas', duration: 30, price: 45, description: 'Valorização do olhar com técnica personalizada para o formato do seu rosto.', imageUrl: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=800&q=80' }
+      ]);
+
+      setSettings(loadedSettings || {
+        name: 'Studio Bella Beauty',
+        subtitle: 'Manicure • Pedicure • Sobrancelhas',
+        phone: '(11) 99999-9999',
+        address: 'Rua das Flores, 123 - Centro',
+        instagram: '@bellabeauty',
+        hours: 'Seg a Sáb • 09:00 às 19:00',
+        welcomeMessage: 'Agende seu horário com nossas especialistas. Conforto, delicadeza e atendimento de alta qualidade em cada detalhe.',
+        heroTitle: 'Beleza no seu tempo',
+        heroSubtitle: 'Seu momento de cuidado começa aqui.',
+        heroDescription: 'Agende seus serviços favoritos em poucos passos. Praticidade e bem-estar em um só lugar.',
+        themeColor: 'rose',
+        loyaltyMaxStamps: 10
+      });
+
+      setCategories(loadedCategories && loadedCategories.length > 0 ? loadedCategories : [
+        { id: '1', name: 'Manicure' },
+        { id: '2', name: 'Pedicure' },
+        { id: '3', name: 'Sobrancelhas' }
+      ]);
+
+      setProfessionals(loadedProfessionals || []);
+      setFeedbacks(loadedFeedbacks || []);
     } catch (e) {
-      console.error(e);
+      console.error("Fallback to default data due to offline/static mode:", e);
+      setServices([
+        { id: '1', name: 'Manicure Tradicional', category: 'Manicure', duration: 45, price: 35, description: 'Cutilagem e esmaltação impecável com produtos de alta qualidade.', imageUrl: 'https://images.unsplash.com/photo-1632345031435-877ff6c2057d?auto=format&fit=crop&w=800&q=80' },
+        { id: '2', name: 'Pedicure Completa', category: 'Pedicure', duration: 45, price: 40, description: 'Cuidado completo para os pés, relaxamento e acabamento perfeito.', imageUrl: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80' },
+        { id: '3', name: 'Design de Sobrancelhas', category: 'Sobrancelhas', duration: 30, price: 45, description: 'Valorização do olhar com técnica personalizada para o formato do seu rosto.', imageUrl: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=800&q=80' }
+      ]);
+      setSettings({
+        name: 'Studio Bella Beauty',
+        subtitle: 'Manicure • Pedicure • Sobrancelhas',
+        phone: '(11) 99999-9999',
+        address: 'Rua das Flores, 123 - Centro',
+        instagram: '@bellabeauty',
+        hours: 'Seg a Sáb • 09:00 às 19:00',
+        welcomeMessage: 'Agende seu horário com nossas especialistas. Conforto, delicadeza e atendimento de alta qualidade em cada detalhe.',
+        heroTitle: 'Beleza no seu tempo',
+        heroSubtitle: 'Seu momento de cuidado começa aqui.',
+        heroDescription: 'Agende seus serviços favoritos em poucos passos. Praticidade e bem-estar em um só lugar.',
+        themeColor: 'rose',
+        loyaltyMaxStamps: 10
+      });
+      setCategories([
+        { id: '1', name: 'Manicure' },
+        { id: '2', name: 'Pedicure' },
+        { id: '3', name: 'Sobrancelhas' }
+      ]);
+      setProfessionals([]);
+      setFeedbacks([]);
     }
   };
 
